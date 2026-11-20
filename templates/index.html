@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}AI Mock Technical Interviewer & Code Evaluator{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Hero Banner -->
+    <div class="hero-card bg-gradient-navy text-white rounded-4 p-4 p-lg-5 mb-5 shadow-lg position-relative overflow-hidden">
+        <div class="row align-items-center position-relative z-1">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <div class="d-inline-flex align-items-center gap-2 bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill text-xs fw-semibold mb-3">
+                    <i class="bi bi-robot"></i> Autonomous FAANG-Grade Technical Interviewer
+                </div>
+                <h1 class="display-5 fw-extrabold mb-3 text-white">
+                    Master Technical Interviews with <span class="text-primary-light">Real-Time AI</span>
+                </h1>
+                <p class="lead text-white-50 mb-4 max-w-xl">
+                    Experience authentic SDE coding interviews powered by Google Gemini. Solve algorithmic problems in an interactive code editor, discuss your approach via voice/text, receive progressive hints, and get an institutional-grade performance scorecard.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ url_for('setup') }}" class="btn btn-primary btn-lg px-4 py-2.5 rounded-pill shadow-sm fw-semibold d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-play-circle-fill fs-5"></i>
+                        <span>Start Mock Interview</span>
+                    </a>
+                    <a href="{{ url_for('questions_bank') }}" class="btn btn-outline-light btn-lg px-4 py-2.5 rounded-pill fw-semibold d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-collection fs-5"></i>
+                        <span>Explore Question Bank</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Interactive Preview Card -->
+            <div class="col-lg-4">
+                <div class="card bg-navy-card border border-navy-light rounded-4 p-4 shadow-sm text-center">
+                    <div class="text-xs uppercase text-muted tracking-wider fw-bold mb-3">Sample Interview Scorecard</div>
+                    <div class="circular-progress-wrap mx-auto mb-3" style="width: 130px; height: 130px;">
+                        <svg class="circular-chart text-success" viewBox="0 0 36 36">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle" stroke-dasharray="92, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <div class="progress-label">
+                            <span class="fs-2 fw-bold text-white">92</span>
+                            <span class="text-xs text-muted">/100</span>
+                        </div>
+                    </div>
+                    <div class="badge bg-success text-white px-3 py-1 rounded-pill fw-semibold text-xs mb-3">
+                        <i class="bi bi-award-fill me-1"></i> VERDICT: STRONG HIRE
+                    </div>
+                    <div class="text-xs text-muted">
+                        Evaluated on Correctness, Big-O Complexity, Clean Code, & Communication.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-glow-1"></div>
+        <div class="hero-glow-2"></div>
+    </div>
+
+    <!-- Core Features Grid -->
+    <div class="mb-5">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-navy mb-2">Beyond LeetCode: Real Human-Like Interview Simulation</h2>
+            <p class="text-muted">Designed to cultivate the problem-solving and communication habits interviewers look for</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-xl-3">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 feature-card transition-all bg-white">
+                    <div class="feature-icon bg-primary-subtle text-primary rounded-3 mb-3 p-3 d-inline-flex">
+                        <i class="bi bi-chat-left-dots-fill fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold text-navy mb-2">Conversational AI</h5>
+                    <p class="text-muted text-sm mb-3">
+                        Engage with a simulated Senior Engineer. Clarify assumptions, explain trade-offs, and talk through edge cases.
+                    </p>
+                    <span class="text-primary fw-semibold text-sm">Powered by Gemini AI</span>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 feature-card transition-all bg-white">
+                    <div class="feature-icon bg-warning-subtle text-warning-emphasis rounded-3 mb-3 p-3 d-inline-flex">
+                        <i class="bi bi-lightbulb-fill fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold text-navy mb-2">3-Tier Hints</h5>
+                    <p class="text-muted text-sm mb-3">
+                        Stuck? Request hints progressively: Tier 1 nudge, Tier 2 structural approach, or Tier 3 pseudocode.
+                    </p>
+                    <span class="text-warning-emphasis fw-semibold text-sm">Adaptive Guidance</span>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 feature-card transition-all bg-white">
+                    <div class="feature-icon bg-success-subtle text-success rounded-3 mb-3 p-3 d-inline-flex">
+                        <i class="bi bi-shield-check fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold text-navy mb-2">Isolated Sandbox</h5>
+                    <p class="text-muted text-sm mb-3">
+                        Execute code safely with strict timeout protection against infinite loops, testing hidden edge cases.
+                    </p>
+                    <span class="text-success fw-semibold text-sm">Subprocess Isolation</span>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 feature-card transition-all bg-white">
+                    <div class="feature-icon bg-info-subtle text-info rounded-3 mb-3 p-3 d-inline-flex">
+                        <i class="bi bi-file-earmark-pdf-fill fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold text-navy mb-2">Executive Scorecard</h5>
+                    <p class="text-muted text-sm mb-3">
+                        Get a detailed PDF scorecard with Big-O complexity derivation, hire recommendation, and reference code diff.
+                    </p>
+                    <span class="text-info fw-semibold text-sm">ReportLab PDF Export</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How an Interview Session Works -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 mb-5 bg-white">
+        <h3 class="fw-bold text-navy mb-4 text-center">The 4 Phases of an AI Mock Interview</h3>
+        <div class="row g-4 text-center">
+            <div class="col-md-3">
+                <div class="step-badge rounded-circle bg-navy text-white fw-bold mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">1</div>
+                <h6 class="fw-bold text-navy mb-2">Choose Track & Level</h6>
+                <p class="text-muted text-xs">Select target company (Google, Amazon, Meta) and difficulty level from curated FAANG problems.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="step-badge rounded-circle bg-navy text-white fw-bold mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">2</div>
+                <h6 class="fw-bold text-navy mb-2">Discuss Approach</h6>
+                <p class="text-muted text-xs">Clarify inputs and constraints with the AI interviewer via voice or chat before writing code.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="step-badge rounded-circle bg-navy text-white fw-bold mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">3</div>
+                <h6 class="fw-bold text-navy mb-2">Code & Test</h6>
+                <p class="text-muted text-xs">Write your Python solution in the code editor and test against sample and edge test cases.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="step-badge rounded-circle bg-navy text-white fw-bold mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">4</div>
+                <h6 class="fw-bold text-navy mb-2">Scorecard & PDF</h6>
+                <p class="text-muted text-xs">Receive your Hire / No-Hire recommendation, Big-O derivation, and downloadable ReportLab PDF.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

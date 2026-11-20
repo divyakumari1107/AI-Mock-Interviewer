@@ -1,0 +1,23 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+
+# Environments
+.env
+venv/
+env/
+.venv/
+
+# SQLite Database
+*.db
+*.sqlite3
+
+# Generated Scorecards
+generated_scorecards/*
+!generated_scorecards/.gitkeep
+
+# IDEs & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

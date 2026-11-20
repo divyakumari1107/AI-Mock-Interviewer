@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Past Scorecards - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold text-navy mb-1">Interview Performance History</h2>
+            <p class="text-muted text-sm mb-0">Review your past scores, hiring recommendations, and feedback transcripts stored in SQLite.</p>
+        </div>
+        <a href="{{ url_for('setup') }}" class="btn btn-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
+            <i class="bi bi-play-circle-fill me-1"></i>New Interview
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        {% if sessions %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-xs text-muted uppercase">
+                        <tr>
+                            <th>Candidate & Role</th>
+                            <th>Company</th>
+                            <th>Problem</th>
+                            <th>Status</th>
+                            <th>Score</th>
+                            <th>Hiring Verdict</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in sessions %}
+                            <tr>
+                                <td>
+                                    <div class="fw-bold text-navy text-sm">{{ s.candidate_name }}</div>
+                                    <div class="text-xs text-muted">{{ s.target_role or 'Software Engineer' }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border text-xs">{{ s.target_company or 'Google' }}</span>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold text-navy text-sm">{{ s.question_title }}</div>
+                                    <span class="badge {% if s.difficulty == 'Easy' %}bg-success-subtle text-success{% elif s.difficulty == 'Medium' %}bg-warning-subtle text-warning-emphasis{% else %}bg-danger-subtle text-danger{% endif %} text-2xs rounded-pill">
+                                        {{ s.difficulty }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if s.status == 'completed' %}
+                                        <span class="badge bg-success-subtle text-success text-xs">Completed</span>
+                                    {% else %}
+                                        <span class="badge bg-warning-subtle text-warning-emphasis text-xs">In Progress</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if s.overall_score %}
+                                        <span class="fw-bold fs-6 text-navy">{{ s.overall_score }}</span><span class="text-xs text-muted">/100</span>
+                                    {% else %}
+                                        <span class="text-xs text-muted">—</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if s.recommendation %}
+                                        <span class="badge {% if 'Strong' in s.recommendation %}bg-success text-white{% elif 'Hire' in s.recommendation %}bg-primary text-white{% elif 'Lean' in s.recommendation %}bg-warning text-dark{% else %}bg-danger text-white{% endif %} text-xs px-2.5 py-1 rounded-pill fw-semibold">
+                                            {{ s.recommendation }}
+                                        </span>
+                                    {% else %}
+                                        <span class="text-xs text-muted">—</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        {% if s.status == 'completed' %}
+                                            <a href="{{ url_for('scorecard', session_id=s.id) }}" class="btn btn-light border text-primary" title="View Scorecard">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{{ url_for('download_pdf', session_id=s.id) }}" class="btn btn-light border text-danger" title="Download PDF">
+                                                <i class="bi bi-file-earmark-pdf"></i>
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ url_for('interview_room', session_id=s.id) }}" class="btn btn-light border text-success" title="Resume Interview">
+                                                <i class="bi bi-play-fill"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-clock-history fs-1 d-block mb-2 text-muted"></i>
+                <h5 class="fw-bold text-navy mb-1">No Past Scorecards</h5>
+                <p class="text-sm mb-3">Complete an interview session to generate your first technical evaluation scorecard.</p>
+                <a href="{{ url_for('setup') }}" class="btn btn-primary btn-sm rounded-pill px-4">Start Interview</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

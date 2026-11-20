@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Question Bank - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold text-navy mb-1">Curated Technical Question Bank</h2>
+            <p class="text-muted text-sm mb-0">Standard coding problems frequently asked at Google, Amazon, Meta, Microsoft, and Apple.</p>
+        </div>
+        <a href="{{ url_for('setup') }}" class="btn btn-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
+            <i class="bi bi-play-circle-fill me-1"></i>Start Interview
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {% for q in questions %}
+            <div class="col-md-6 col-xl-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white d-flex flex-column feature-card">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="badge bg-light text-navy border text-xs">{{ q.category }}</span>
+                        <span class="badge {% if q.difficulty == 'Easy' %}bg-success-subtle text-success{% elif q.difficulty == 'Medium' %}bg-warning-subtle text-warning-emphasis{% else %}bg-danger-subtle text-danger{% endif %} text-xs rounded-pill">
+                            {{ q.difficulty }}
+                        </span>
+                    </div>
+
+                    <h5 class="fw-bold text-navy mb-2">{{ q.title }}</h5>
+                    <p class="text-muted text-xs mb-3 flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                        {{ q.description }}
+                    </p>
+
+                    <div class="p-2.5 bg-light rounded-3 text-2xs font-monospace text-muted mb-3">
+                        <div><strong>Target:</strong> {{ q.optimal_complexity }}</div>
+                        <div><strong>Companies:</strong> {{ q.company }}</div>
+                    </div>
+
+                    <form action="{{ url_for('setup') }}" method="POST" class="mt-auto">
+                        <input type="hidden" name="candidate_name" value="Candidate">
+                        <input type="hidden" name="target_company" value="Google">
+                        <input type="hidden" name="target_role" value="Software Engineer">
+                        <input type="hidden" name="question_id" value="{{ q.id }}">
+                        <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill w-100 fw-semibold">
+                            Practice This Problem
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

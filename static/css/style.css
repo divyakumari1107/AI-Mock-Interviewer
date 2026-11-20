@@ -1,0 +1,194 @@
+/* ==========================================================================
+   AI Mock Technical Interviewer - Custom Design System
+   ========================================================================== */
+
+:root {
+    --navy-dark: #081220;
+    --navy-main: #0B192C;
+    --navy-card: #12233C;
+    --navy-light: #1E3E62;
+    --primary-blue: #0066FF;
+    --primary-light: #388BFF;
+    --surface-bg: #F4F7FB;
+    --card-bg: #FFFFFF;
+    --text-navy: #0B192C;
+    --text-muted: #64748B;
+    --border-subtle: #E2E8F0;
+    --purple-main: #8B5CF6;
+    --purple-subtle: #F5F3FF;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--text-navy);
+    background-color: var(--surface-bg);
+    overflow-x: hidden;
+}
+
+/* Background Utility Classes */
+.bg-navy { background-color: var(--navy-main) !important; }
+.bg-navy-dark { background-color: var(--navy-dark) !important; }
+.bg-navy-card { background-color: var(--navy-card) !important; }
+.border-navy-light { border-color: rgba(255, 255, 255, 0.1) !important; }
+.bg-surface { background-color: var(--surface-bg) !important; }
+.text-navy { color: var(--text-navy) !important; }
+.text-primary-light { color: var(--primary-light) !important; }
+.text-purple { color: var(--purple-main) !important; }
+.bg-purple { background-color: var(--purple-main) !important; }
+.bg-purple-subtle { background-color: var(--purple-subtle) !important; }
+
+/* Font size utilities */
+.text-2xs { font-size: 0.7rem; }
+.text-xs { font-size: 0.78rem; }
+.text-sm { font-size: 0.875rem; }
+.fw-extrabold { font-weight: 800; }
+.tracking-wider { letter-spacing: 0.05em; }
+
+/* Sidebar Navigation */
+.sidebar {
+    width: 250px;
+    min-height: calc(100vh - 58px);
+    transition: all 0.25s ease-in-out;
+}
+@media (max-width: 991.98px) {
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+    }
+    .min-vh-100 {
+        flex-direction: column;
+    }
+}
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    color: #94A3B8;
+    transition: all 0.2s ease;
+}
+.sidebar .nav-link:hover {
+    color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+.sidebar .nav-link.active {
+    background-color: var(--primary-blue) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.35);
+}
+
+/* Engine Pulse Indicator */
+.status-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Hero Section */
+.bg-gradient-navy {
+    background: linear-gradient(135deg, #0B192C 0%, #1E3E62 100%);
+}
+.hero-glow-1 {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(0, 102, 255, 0.25) 0%, rgba(0, 102, 255, 0) 70%);
+    top: -50px;
+    right: 5%;
+    pointer-events: none;
+}
+.hero-glow-2 {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0) 70%);
+    bottom: -50px;
+    left: 10%;
+    pointer-events: none;
+}
+.max-w-xl { max-width: 650px; }
+
+/* Circular Progress Indicator */
+.circular-progress-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.circular-chart {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+}
+.circle-bg {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.08);
+    stroke-width: 3.2;
+}
+.card.bg-navy-card .circle-bg {
+    stroke: rgba(255, 255, 255, 0.1);
+}
+.circle {
+    fill: none;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    animation: progress 1.2s ease-out forwards;
+}
+.progress-label {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+@keyframes progress {
+    0% { stroke-dasharray: 0 100; }
+}
+
+/* Code Editor Dark Area */
+.code-editor-textarea {
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    line-height: 1.6;
+    background-color: #0F172A !important;
+    color: #F8FAFC !important;
+    border-radius: 0;
+}
+
+/* Mic pulse when listening */
+.mic-recording {
+    background-color: #EF4444 !important;
+    color: #FFFFFF !important;
+    animation: mic-pulse 1s infinite alternate;
+}
+@keyframes mic-pulse {
+    from { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    to { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
+/* Feature card hover */
+.feature-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(11, 25, 44, 0.08) !important;
+}
+
+@media (min-width: 768px) {
+    .border-end-md {
+        border-right: 1px solid var(--border-subtle);
+    }
+}

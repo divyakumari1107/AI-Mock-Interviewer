@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}Interview Scorecard: {{ eval.candidate_name }} - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <h2 class="fw-bold text-navy mb-0">Candidate Performance Scorecard</h2>
+                <span class="badge bg-{{ eval.badge_color }} text-white rounded-pill px-3 py-1 text-xs fw-semibold">
+                    {{ eval.recommendation|upper }}
+                </span>
+            </div>
+            <p class="text-muted text-sm mb-0">
+                Evaluation for <strong>{{ eval.candidate_name }}</strong> • {{ eval.target_role }} at {{ eval.target_company }} • Problem: <strong>{{ eval.question_title }}</strong>
+            </p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ url_for('download_pdf', session_id=eval.session_id) }}" class="btn btn-primary px-4 py-2 rounded-pill fw-semibold shadow-sm d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-pdf-fill fs-5"></i>
+                <span>Download PDF Scorecard</span>
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary px-3 py-2 rounded-pill fw-semibold text-sm">
+                Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Executive Rating Banner Card -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 mb-4 bg-white">
+        <div class="row align-items-center g-4">
+            <!-- Score Gauge -->
+            <div class="col-md-5 col-lg-4 text-center border-end-md">
+                <div class="text-xs uppercase tracking-wider text-muted fw-bold mb-2">Overall Candidate Rating</div>
+                <div class="circular-progress-wrap mx-auto my-3" style="width: 160px; height: 160px;">
+                    <svg class="circular-chart text-{{ eval.badge_color }}" viewBox="0 0 36 36">
+                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle" stroke-dasharray="{{ eval.overall_score }}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                    <div class="progress-label">
+                        <span class="fs-1 fw-extrabold text-navy">{{ eval.overall_score }}</span>
+                        <span class="text-xs text-muted">/100</span>
+                    </div>
+                </div>
+                <div class="badge bg-{{ eval.badge_color }} text-white px-3 py-1.5 rounded-pill fw-bold text-xs">
+                    VERDICT: {{ eval.recommendation|upper }}
+                </div>
+            </div>
+
+            <!-- 4 Pillars Breakdown -->
+            <div class="col-md-7 col-lg-8">
+                <div class="ps-md-3">
+                    <h5 class="fw-bold text-navy mb-3">Evaluation Pillars Breakdown</h5>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between text-xs fw-bold text-navy mb-1">
+                            <span>Algorithmic Correctness (40%)</span>
+                            <span>{{ eval.correctness_score }}/100</span>
+                        </div>
+                        <div class="progress" style="height: 7px;">
+                            <div class="progress-bar bg-success" style="width: {{ eval.correctness_score }}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between text-xs fw-bold text-navy mb-1">
+                            <span>Computational Complexity (25%)</span>
+                            <span>{{ eval.complexity_score }}/100</span>
+                        </div>
+                        <div class="progress" style="height: 7px;">
+                            <div class="progress-bar bg-primary" style="width: {{ eval.complexity_score }}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between text-xs fw-bold text-navy mb-1">
+                            <span>Code Quality & Clean Architecture (20%)</span>
+                            <span>{{ eval.quality_score }}/100</span>
+                        </div>
+                        <div class="progress" style="height: 7px;">
+                            <div class="progress-bar bg-info" style="width: {{ eval.quality_score }}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between text-xs fw-bold text-navy mb-1">
+                            <span>Communication & Hint Independence (15%)</span>
+                            <span>{{ eval.communication_score }}/100</span>
+                        </div>
+                        <div class="progress" style="height: 7px;">
+                            <div class="progress-bar bg-purple" style="width: {{ eval.communication_score }}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Complexity Badges Row -->
+                    <div class="d-flex flex-wrap gap-2 pt-2 border-top text-xs">
+                        <span class="badge bg-light text-navy border p-2">
+                            <strong>Derived Time:</strong> {{ eval.time_complexity }}
+                        </span>
+                        <span class="badge bg-light text-navy border p-2">
+                            <strong>Derived Space:</strong> {{ eval.space_complexity }}
+                        </span>
+                        <span class="badge bg-light text-navy border p-2">
+                            <strong>Target Optimal:</strong> {{ eval.optimal_complexity }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback & Strengths / Weaknesses -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <h5 class="fw-bold text-navy mb-3"><i class="bi bi-chat-quote-fill text-primary me-2"></i>Interviewer Assessment</h5>
+                <p class="text-sm text-secondary mb-4">{{ eval.feedback.summary }}</p>
+
+                <h6 class="fw-bold text-success text-xs uppercase mb-2"><i class="bi bi-check-circle-fill me-1"></i>Key Strengths:</h6>
+                <ul class="list-unstyled d-flex flex-column gap-2 text-xs text-navy mb-3">
+                    {% for s in eval.feedback.strengths %}
+                        <li class="d-flex align-items-start gap-2">
+                            <i class="bi bi-check2 text-success mt-0.5"></i>
+                            <span>{{ s }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% if eval.feedback.weaknesses %}
+                    <h6 class="fw-bold text-danger text-xs uppercase mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i>Areas for Improvement:</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2 text-xs text-navy mb-0">
+                        {% for w in eval.feedback.weaknesses %}
+                            <li class="d-flex align-items-start gap-2">
+                                <i class="bi bi-arrow-right-short text-danger mt-0.5"></i>
+                                <span>{{ w }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Test Case Execution Results -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <h5 class="fw-bold text-navy mb-3"><i class="bi bi-cpu-fill text-success me-2"></i>Test Suite Execution Details</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle text-xs font-monospace mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Inputs</th>
+                                <th>Expected</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tc in eval.test_results.details %}
+                                <tr>
+                                    <td>Case {{ tc.case_number }}</td>
+                                    <td class="text-truncate" style="max-width: 150px;">{{ tc.input }}</td>
+                                    <td>{{ tc.expected }}</td>
+                                    <td>
+                                        {% if tc.passed %}
+                                            <span class="badge bg-success-subtle text-success">PASSED</span>
+                                        {% else %}
+                                            <span class="badge bg-danger-subtle text-danger" title="{{ tc.error }}">FAILED</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Comparison: Candidate vs Reference Solution -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+        <h5 class="fw-bold text-navy mb-3"><i class="bi bi-code-square text-primary me-2"></i>Code Comparison</h5>
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <div class="border rounded-3 p-3 bg-dark text-light">
+                    <div class="text-xs uppercase fw-bold text-muted mb-2 font-monospace">Your Submitted Solution:</div>
+                    <pre class="mb-0 text-xs font-monospace" style="white-space: pre-wrap;">{{ eval.submitted_code }}</pre>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="border rounded-3 p-3 bg-dark text-light">
+                    <div class="text-xs uppercase fw-bold text-success mb-2 font-monospace">Optimal Reference Solution:</div>
+                    <pre class="mb-0 text-xs font-monospace text-success-light" style="white-space: pre-wrap;">{{ eval.solution_code }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

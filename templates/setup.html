@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Setup Interview - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <div class="mb-4">
+        <h2 class="fw-bold text-navy mb-1">Configure Your Mock Interview</h2>
+        <p class="text-muted text-sm mb-0">Select your target tech company, engineering level, and coding problem to begin.</p>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 bg-white">
+        <form method="POST" action="{{ url_for('setup') }}">
+            <div class="row g-4">
+                <!-- Candidate Info -->
+                <div class="col-md-6">
+                    <label for="candidate_name" class="form-label fw-bold text-navy text-sm">Your Name</label>
+                    <input type="text" class="form-control rounded-3" id="candidate_name" name="candidate_name" placeholder="e.g. Alex Morgan" required value="Candidate">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="target_role" class="form-label fw-bold text-navy text-sm">Target Engineering Role</label>
+                    <select class="form-select rounded-3 text-sm" id="target_role" name="target_role">
+                        <option value="Software Engineer I (Frontend/Backend)" selected>Software Engineer I (Frontend/Backend)</option>
+                        <option value="Senior Software Development Engineer (SDE II)">Senior Software Development Engineer (SDE II)</option>
+                        <option value="Backend Systems Engineer">Backend Systems Engineer</option>
+                        <option value="Full-Stack Engineer">Full-Stack Engineer</option>
+                    </select>
+                </div>
+
+                <!-- Company Selector -->
+                <div class="col-md-6">
+                    <label for="target_company" class="form-label fw-bold text-navy text-sm">Target Company Interview Persona</label>
+                    <select class="form-select rounded-3 text-sm" id="target_company" name="target_company">
+                        <option value="Google" selected>Google (Algorithms & Clean Big-O Focus)</option>
+                        <option value="Amazon">Amazon (Pragmatic Architecture & Edge Cases)</option>
+                        <option value="Meta">Meta / Facebook (Fast Iteration & Verification)</option>
+                        <option value="Microsoft">Microsoft (Modular Code & Clean Design)</option>
+                        <option value="Apple">Apple (System Robustness & Precision)</option>
+                    </select>
+                </div>
+
+                <!-- Problem Selection -->
+                <div class="col-md-6">
+                    <label for="question_id" class="form-label fw-bold text-navy text-sm">Select Technical Problem</label>
+                    <select class="form-select rounded-3 text-sm" id="question_id" name="question_id">
+                        {% for q in questions %}
+                            <option value="{{ q.id }}">{{ q.title }} ({{ q.difficulty }} • {{ q.category }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Interview Instructions Callout -->
+                <div class="col-12">
+                    <div class="p-3.5 bg-light rounded-3 border text-xs text-muted">
+                        <div class="fw-bold text-navy mb-1"><i class="bi bi-info-circle-fill text-primary me-1"></i>Interview Protocol:</div>
+                        <ul class="mb-0 ps-3 d-flex flex-column gap-1">
+                            <li>You will be paired with an autonomous AI interviewer who will welcome you and answer questions.</li>
+                            <li>Discuss your initial approach or clarify constraints before writing code.</li>
+                            <li>If stuck, ask for hints (3 progressive tiers available).</li>
+                            <li>Run sample test cases to verify logic, then click <strong>Submit Solution</strong> for full edge case evaluation and your Scorecard.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-semibold shadow-sm py-2.5 d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-door-open-fill"></i>
+                        <span>Enter Interview Room</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
