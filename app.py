@@ -41,9 +41,34 @@ def inject_global_data():
 # -------------------------------------------------------------
 
 @app.route("/")
+@app.route("/api/index.py")
+@app.route("/api/index")
+@app.route("/api")
+@app.route("/index.py")
 def index():
     """Home / Landing page."""
     return render_template("index.html", active_page="home")
+
+
+@app.route("/debug")
+def debug_endpoint():
+    return jsonify({
+        "message": "Flask is running!",
+        "path": request.path,
+        "PATH_INFO": request.environ.get("PATH_INFO"),
+        "SCRIPT_NAME": request.environ.get("SCRIPT_NAME"),
+    })
+
+
+@app.errorhandler(404)
+def handle_404(e):
+    if request.path.startswith("/api/index") or request.path in ["/api", "/index.py"]:
+        return index()
+    return jsonify({
+        "error": "Not Found",
+        "requested_path": request.path,
+        "PATH_INFO": request.environ.get("PATH_INFO")
+    }), 404
 
 
 @app.route("/dashboard")
