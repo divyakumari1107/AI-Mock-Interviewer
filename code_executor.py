@@ -1,57 +1,54 @@
 import time
 import sys
 import traceback
-import multiprocessing
+import queue
+import threading
 
 
-def _worker_execute(code_str, func_name, kwargs, result_queue):
-    """Worker process function to safely execute code in an isolated scope."""
-    try:
-        # Create dedicated local namespace
-        local_scope = {}
-        # Pre-import common algorithmic libraries
-        exec("import math\nimport collections\nimport heapq\nfrom typing import List, Dict, Optional, Tuple", local_scope)
+def _run_candidate_code(code_str, func_name, kwargs):
+    """Executes candidate code in an isolated dictionary scope."""
+    local_scope = {}
+    exec("import math\nimport collections\nimport heapq\nfrom typing import List, Dict, Optional, Tuple", local_scope)
+    exec(code_str, local_scope)
 
-        # Execute candidate's function definition
-        exec(code_str, local_scope)
+    if func_name not in local_scope:
+        return {"success": False, "error": f"Function '{func_name}' not defined in submitted code."}
 
-        if func_name not in local_scope:
-            result_queue.put({"success": False, "error": f"Function '{func_name}' not defined in submitted code."})
-            return
+    func = local_scope[func_name]
+    start_time = time.perf_counter()
+    output = func(**kwargs)
+    duration_ms = (time.perf_counter() - start_time) * 1000
 
-        func = local_scope[func_name]
-        start_time = time.perf_counter()
-        output = func(**kwargs)
-        duration_ms = (time.perf_counter() - start_time) * 1000
-
-        result_queue.put({
-            "success": True,
-            "output": output,
-            "duration_ms": round(duration_ms, 2)
-        })
-    except Exception as e:
-        result_queue.put({
-            "success": False,
-            "error": f"{type(e).__name__}: {str(e)}"
-        })
+    return {
+        "success": True,
+        "output": output,
+        "duration_ms": round(duration_ms, 2)
+    }
 
 
 def execute_test_case(code_str, func_name, input_kwargs, expected_output, timeout_sec=2.5):
     """
-    Execute a single test case with hard timeout protection.
+    Execute a single test case with timeout protection.
+    Serverless-safe (uses Python thread + queue.Queue without POSIX semaphore restrictions).
     """
-    result_queue = multiprocessing.Queue()
-    process = multiprocessing.Process(
-        target=_worker_execute,
-        args=(code_str, func_name, input_kwargs, result_queue)
-    )
+    res_queue = queue.Queue()
 
-    process.start()
-    process.join(timeout=timeout_sec)
+    def worker():
+        try:
+            res = _run_candidate_code(code_str, func_name, input_kwargs)
+            res_queue.put(res)
+        except Exception as e:
+            res_queue.put({
+                "success": False,
+                "error": f"{type(e).__name__}: {str(e)}"
+            })
 
-    if process.is_alive():
-        process.terminate()
-        process.join()
+    t = threading.Thread(target=worker)
+    t.daemon = True
+    t.start()
+    t.join(timeout=timeout_sec)
+
+    if t.is_alive():
         return {
             "passed": False,
             "input": input_kwargs,
@@ -61,8 +58,8 @@ def execute_test_case(code_str, func_name, input_kwargs, expected_output, timeou
             "duration_ms": timeout_sec * 1000
         }
 
-    if not result_queue.empty():
-        res = result_queue.get()
+    if not res_queue.empty():
+        res = res_queue.get()
         if not res["success"]:
             return {
                 "passed": False,
@@ -74,7 +71,6 @@ def execute_test_case(code_str, func_name, input_kwargs, expected_output, timeou
             }
 
         actual_output = res["output"]
-        # Comparison with handling for lists, sets, and booleans
         passed = (actual_output == expected_output)
 
         return {

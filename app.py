@@ -37,7 +37,7 @@ class VercelPathFixer:
             environ["QUERY_STRING"] = urllib.parse.urlencode(params, doseq=True)
         else:
             path = environ.get("PATH_INFO", "")
-            for prefix in ["/api/index.py", "/api/index", "/api", "/index.py"]:
+            for prefix in ["/api/index.py", "/api/index", "/index.py"]:
                 if path == prefix:
                     environ["PATH_INFO"] = "/"
                     break
@@ -184,15 +184,20 @@ def interview_room(session_id):
 # -------------------------------------------------------------
 
 @app.route("/api/chat", methods=["POST"])
+@app.route("/chat", methods=["POST"])
 def api_chat():
     """AJAX endpoint for conversing with the AI interviewer."""
     data = request.get_json() or {}
-    session_id = data.get("session_id")
+    session_id = data.get("session_id", 1)
+    try:
+        session_id = int(session_id)
+    except Exception:
+        session_id = 1
     candidate_message = data.get("message", "").strip()
     current_code = data.get("current_code", "")
 
-    if not session_id or not candidate_message:
-        return jsonify({"success": False, "error": "Missing session ID or message"}), 400
+    if not candidate_message:
+        return jsonify({"success": False, "error": "Missing message"}), 400
 
     session_data = get_session(session_id)
     if not session_data:
@@ -223,10 +228,15 @@ def api_chat():
 
 
 @app.route("/api/hint", methods=["POST"])
+@app.route("/hint", methods=["POST"])
 def api_hint():
     """AJAX endpoint to unlock a progressive 3-tier hint."""
     data = request.get_json() or {}
-    session_id = data.get("session_id")
+    session_id = data.get("session_id", 1)
+    try:
+        session_id = int(session_id)
+    except Exception:
+        session_id = 1
 
     session_data = get_session(session_id)
     if not session_data:
@@ -253,10 +263,15 @@ def api_hint():
 
 
 @app.route("/api/run-code", methods=["POST"])
+@app.route("/run-code", methods=["POST"])
 def api_run_code():
     """AJAX endpoint to execute code against sample test cases only."""
     data = request.get_json() or {}
-    session_id = data.get("session_id")
+    session_id = data.get("session_id", 1)
+    try:
+        session_id = int(session_id)
+    except Exception:
+        session_id = 1
     code_str = data.get("code", "")
 
     session_data = get_session(session_id)
@@ -274,10 +289,15 @@ def api_run_code():
 
 
 @app.route("/api/submit-code", methods=["POST"])
+@app.route("/submit-code", methods=["POST"])
 def api_submit_code():
     """AJAX endpoint for final submission: tests all edge cases and runs full evaluation."""
     data = request.get_json() or {}
-    session_id = data.get("session_id")
+    session_id = data.get("session_id", 1)
+    try:
+        session_id = int(session_id)
+    except Exception:
+        session_id = 1
     code_str = data.get("code", "")
     duration_seconds = data.get("duration_seconds", 0)
 
