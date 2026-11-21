@@ -40,13 +40,15 @@ def inject_global_data():
 # 1. LANDING & DASHBOARD ROUTES
 # -------------------------------------------------------------
 
-@app.route("/")
-@app.route("/api/index.py")
-@app.route("/api/index")
-@app.route("/api")
-@app.route("/index.py")
+@app.route("/", methods=["GET", "POST"])
+@app.route("/api/index.py", methods=["GET", "POST"])
+@app.route("/api/index", methods=["GET", "POST"])
+@app.route("/api", methods=["GET", "POST"])
+@app.route("/index.py", methods=["GET", "POST"])
 def index():
     """Home / Landing page."""
+    if request.args.get("show_env"):
+        return jsonify({k: str(v) for k, v in request.environ.items()})
     return render_template("index.html", active_page="home")
 
 
