@@ -1,5 +1,6 @@
 import os
 import sys
+import urllib.parse
 
 # Ensure project root is in python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,9 +18,15 @@ class VercelPathFixer:
         self.wsgi_app = wsgi_app
 
     def __call__(self, environ, start_response):
-        matched = environ.get("HTTP_X_MATCHED_PATH")
-        if matched:
-            environ["PATH_INFO"] = matched.split("?")[0]
+        query = environ.get("QUERY_STRING", "")
+        params = urllib.parse.parse_qs(query)
+        if "__path__" in params and params["__path__"]:
+            real_path = params["__path__"][0]
+            if not real_path.startswith("/"):
+                real_path = "/" + real_path
+            environ["PATH_INFO"] = real_path
+            del params["__path__"]
+            environ["QUERY_STRING"] = urllib.parse.urlencode(params, doseq=True)
         else:
             path = environ.get("PATH_INFO", "")
             for prefix in ["/api/index.py", "/api/index"]:
