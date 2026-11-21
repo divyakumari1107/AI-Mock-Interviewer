@@ -11,20 +11,24 @@ if parent_dir not in sys.path:
 from app import app
 
 
-# WSGI middleware to strip Vercel serverless prefix if passed by rewrite
+# WSGI middleware to accurately resolve Vercel serverless request path
 class VercelPathFixer:
     def __init__(self, wsgi_app):
         self.wsgi_app = wsgi_app
 
     def __call__(self, environ, start_response):
-        path = environ.get("PATH_INFO", "")
-        for prefix in ["/api/index.py", "/api/index"]:
-            if path == prefix:
-                environ["PATH_INFO"] = "/"
-                break
-            elif path.startswith(prefix + "/"):
-                environ["PATH_INFO"] = path[len(prefix):]
-                break
+        matched = environ.get("HTTP_X_MATCHED_PATH")
+        if matched:
+            environ["PATH_INFO"] = matched.split("?")[0]
+        else:
+            path = environ.get("PATH_INFO", "")
+            for prefix in ["/api/index.py", "/api/index"]:
+                if path == prefix:
+                    environ["PATH_INFO"] = "/"
+                    break
+                elif path.startswith(prefix + "/"):
+                    environ["PATH_INFO"] = path[len(prefix):]
+                    break
         return self.wsgi_app(environ, start_response)
 
 
