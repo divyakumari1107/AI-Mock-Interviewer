@@ -1,5 +1,7 @@
 # AI Mock Technical Interviewer & Code Evaluator
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-ai--mock--interviewer.vercel.app-success?style=for-the-badge&logo=vercel)](https://ai-mock-interviewer-brown-ten.vercel.app)
+[![Vercel Production](https://img.shields.io/badge/Vercel-Serverless%20Live-black.svg?logo=vercel)](https://ai-mock-interviewer-brown-ten.vercel.app)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.0%2B-black.svg?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-API%20Enabled-orange.svg?logo=google&logoColor=white)](https://ai.google.dev/)
@@ -8,6 +10,20 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 An autonomous AI-powered technical coding interview platform designed for engineering students and job candidates. It simulates a senior engineer conducting live FAANG coding interviews with real-time conversational problem clarification, progressive 3-tier hints, sandboxed multi-case code execution, Big-O computational complexity analysis, and downloadable hiring scorecards.
+
+---
+
+## 🌐 Live Production Deployments
+
+This project is deployed live on Vercel with serverless Python execution and interactive browser code running:
+
+| Resource | Live Link | Description | Status |
+| :--- | :--- | :--- | :--- |
+| **AI Mock Interviewer (Web App)** | **[https://ai-mock-interviewer-brown-ten.vercel.app](https://ai-mock-interviewer-brown-ten.vercel.app)** | Complete AI Technical Interview Platform | 🟢 **Live (200 OK)** |
+| **Start Mock Interview** | **[https://ai-mock-interviewer-brown-ten.vercel.app/setup](https://ai-mock-interviewer-brown-ten.vercel.app/setup)** | Select company persona, problem & difficulty | 🟢 **Live (200 OK)** |
+| **Candidate Dashboard** | **[https://ai-mock-interviewer-brown-ten.vercel.app/dashboard](https://ai-mock-interviewer-brown-ten.vercel.app/dashboard)** | Track metrics, past interview sessions, and score averages | 🟢 **Live (200 OK)** |
+| **Curated Question Bank** | **[https://ai-mock-interviewer-brown-ten.vercel.app/questions](https://ai-mock-interviewer-brown-ten.vercel.app/questions)** | Explore FAANG technical coding challenges | 🟢 **Live (200 OK)** |
+| **Production Health Probe** | **[https://ai-mock-interviewer-brown-ten.vercel.app/health](https://ai-mock-interviewer-brown-ten.vercel.app/health)** | Automated health check endpoint | 🟢 **Live (200 OK)** |
 
 ---
 
